@@ -1,0 +1,233 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    
+}
+
+.top-navbar {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #000000;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-radius: 15px;
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
+}
+
+.top-navbar .title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.top-navbar .sort-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.top-navbar .sort-buttons button {
+    padding: 10px;
+    background-color: #27a534;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.top-navbar .sort-buttons button:hover {
+    background-color: #20572b;
+    transform: scale(1.05);
+}
+
+.top-navbar .creator {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between name and logo */
+    margin-left: 20px;
+}
+
+.top-navbar .linkedin-logo {
+    width: 24px;
+    height: 24px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 35px); /* Adjust height to fit between top and bottom bars */
+    width: 100%;
+    margin-top: 50px; /* Space for the top navbar */
+    box-sizing: border-box;
+}
+
+.array-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 95%;
+    height: 80%; /* Adjust height to fit content and additional space */
+    border: 2px solid #000;
+    box-sizing: border-box;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.array-bar {
+    background-color: rgb(198, 226, 226);
+    display: inline-block;
+    margin: 0 1px;
+    transition: height 0.3s;
+}
+
+.bottom-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px; /* Space between button and range controls */
+    width: 100%;
+    margin-top: 10px;
+}
+
+.bottom-content .array-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between button and range input */
+}
+
+.bn31 {
+    background-image: linear-gradient(to right, #006175 0%, #00a950 100%);
+    border-radius: 40px;
+    color: #0cf892;
+    height: 50px;
+    font-size: 1.4em;
+    padding: 4px;
+    text-decoration: none;
+    border: none;
+}
+
+.bn31:hover {
+    color: #fff;
+}
+
+.range {
+    width: 200px; /* Adjust width for better fit */
+    height: 15px;
+    -webkit-appearance: none;
+    background: #026804;
+    outline: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgb(1, 111, 20);
+}
+
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #9fd2a1;
+    cursor: pointer;
+    border: 4px solid #333;
+    box-shadow: -407px 0 0 400px rgb(198, 226, 226);
+}
+
+#rangeValue {
+    font-size: 16px; /* Adjust font size as needed */
+    color: #999;
+    font-weight: 400;
+}
+.range-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.range-value {
+    font-size: 1.5rem;
+    margin-bottom: 1px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .top-navbar .title {
+        font-size: 20px;
+    }
+
+    .top-navbar .sort-buttons button {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .top-navbar .creator {
+        font-size: 16px;
+        gap: 5px;
+    }
+
+    .top-navbar .linkedin-logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    .bottom-content {
+        flex-direction: column;
+        gap: 20px; /* Adjust gap for vertical layout */
+    }
+
+    .bottom-content .array-size-controls {
+        flex-direction: column;
+        gap: 5px; /* Adjust gap for vertical layout */
+    }
+
+    .range {
+        width: 150px; /* Adjust width for better fit */
+    }
+}
+
+@media (max-width: 480px) {
+    .top-navbar .title {
+        font-size: 18px;
+    }
+
+    .top-navbar .sort-buttons button {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .top-navbar .creator {
+        font-size: 14px;
+        gap: 5px;
+    }
+
+    .top-navbar .linkedin-logo {
+        width: 18px;
+        height: 18px;
+    }
+
+    .bottom-content {
+        gap: 15px; /* Adjust gap for vertical layout */
+    }
+
+    .bottom-content .array-size-controls {
+        gap: 5px; /* Adjust gap for vertical layout */
+    }
+
+    .range {
+        width: 120px; /* Adjust width for better fit */
+    }
+}
