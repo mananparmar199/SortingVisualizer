@@ -2,6 +2,7 @@ import React from 'react';
 import './SortingVisualizer.css';
 import LinkedInLogo from './Images/Logo/LinkedIn-Logo.png';
 import { getMergeSortAnimation } from '../Sorting Algorithm/mergeSort'; 
+import { getSelectionSortAnimation } from '../Sorting Algorithm/selectionSort';
 
 export class SortingVisualizer extends React.Component {
   constructor(props) {
@@ -99,6 +100,31 @@ export class SortingVisualizer extends React.Component {
     }
   }
 
+  selectionSort()
+  {
+    const animations = getSelectionSortAnimation(this.state.array);
+    const speed = this.state.speed;
+    for (let i = 0; i < animations.length; i++) {
+        const arrayBars = document.getElementsByClassName('array-bar');        
+        const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight, barOneColor, barTwoColor] = animations[i];
+        const barOne = arrayBars[barOneIdx];
+        const barTwo = arrayBars[barTwoIdx];
+        if (barOne && barTwo) {
+        const barOneStyle = barOne.style;
+        const barTwoStyle = barTwo.style;
+        setTimeout(() => {
+                barOneStyle.backgroundColor = barOneColor;
+                barTwoStyle.backgroundColor = barTwoColor;
+                if(barOneHeight !== -1)
+                {
+                    barOneStyle.height = `${barOneHeight}px`;
+                    barTwoStyle.height = `${barTwoHeight}px`;
+                }
+            }, i * (100 / speed));   
+        }
+      }
+  }
+
   quickSort()
   {
     alert("Work in progress for QuickSort. Currently only MERGE SORT is LIVE :)");
@@ -125,6 +151,7 @@ export class SortingVisualizer extends React.Component {
           <div className="title">Sorting Visualizer</div>
           <div className="sort-buttons">
             <button onClick={() => this.mergeSort()}>Merge Sort</button>
+            <button onClick={() => this.selectionSort()}>Selection Sort</button>
             <button onClick={() => this.quickSort()}>Quick Sort</button>
             <button onClick={() => this.heapSort()}>Heap Sort</button>
             <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
