@@ -99,6 +99,20 @@ export class SortingVisualizer extends React.Component {
     }
   }
 
+  quickSort()
+  {
+    alert("Work in progress for QuickSort. Currently only MERGE SORT is LIVE :)");
+  }
+
+  heapSort()
+  {
+    alert("Work in progress for heapSort. Currently only MERGE SORT is LIVE :)");
+  }
+
+  bubbleSort()
+  {
+    alert("Work in progress for bubbleSort. Currently only MERGE SORT is LIVE :)");
+  }
   render() {
     const { array, barWidth, arraySize, speed} = this.state;
     const minSize = 10;
