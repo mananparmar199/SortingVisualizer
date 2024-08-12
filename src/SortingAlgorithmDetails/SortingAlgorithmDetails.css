@@ -1,0 +1,50 @@
+
+/* Container styling */
+.algorithm-details-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Heading styles */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #2980b9;
+    margin: 20px 0 10px;
+}
+/* Remove list markers */
+ul, ol {
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none; /* Removes default markers */
+}
+
+li {
+    margin-bottom: 10px;
+    line-height: 1.4; /* Adjust line-height to reduce vertical space */
+}
+
+/* Optional: To add custom styling for list items without markers */
+ul.custom-list, ol.custom-list {
+    list-style-type: none; /* Ensures no default markers */
+    padding-left: 0; /* Removes padding */
+}
+
+ul.custom-list li, ol.custom-list li {
+    position: relative;
+    padding-left: 1em; /* Adds space for custom markers if needed */
+}
+
+ul.custom-list li::before, ol.custom-list li::before {
+    content: ''; /* Custom content for markers if desired */
+    position: absolute;
+    left: 0;
+    /* You can add styling here for custom markers, e.g. icons */
+}

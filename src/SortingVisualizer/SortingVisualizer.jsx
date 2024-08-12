@@ -1,6 +1,7 @@
 import React from 'react';
 import './SortingVisualizer.css';
 import LinkedInLogo from './Images/Logo/LinkedIn-Logo.png';
+import SortingAlgorithmDetails from '../SortingAlgorithmDetails/SortingAlgorithmDetails'; // Import the new component
 import { getMergeSortAnimation } from '../Sorting Algorithm/mergeSort'; 
 import { getSelectionSortAnimation } from '../Sorting Algorithm/selectionSort';
 
@@ -13,6 +14,7 @@ export class SortingVisualizer extends React.Component {
       barWidth: 2,
       arraySize: 50,
       speed: 10,
+      selectedAlgo: 'Merge Sort' // State to manage selected algorithm
     };
     this.containerRef = React.createRef();
   }
@@ -100,47 +102,56 @@ export class SortingVisualizer extends React.Component {
     }
   }
 
-  selectionSort()
-  {
+  selectionSort() {
     const animations = getSelectionSortAnimation(this.state.array);
     const speed = this.state.speed;
     for (let i = 0; i < animations.length; i++) {
-        const arrayBars = document.getElementsByClassName('array-bar');        
-        const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight, barOneColor, barTwoColor] = animations[i];
-        const barOne = arrayBars[barOneIdx];
-        const barTwo = arrayBars[barTwoIdx];
-        if (barOne && barTwo) {
+      const arrayBars = document.getElementsByClassName('array-bar');        
+      const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight, barOneColor, barTwoColor] = animations[i];
+      const barOne = arrayBars[barOneIdx];
+      const barTwo = arrayBars[barTwoIdx];
+      if (barOne && barTwo) {
         const barOneStyle = barOne.style;
         const barTwoStyle = barTwo.style;
         setTimeout(() => {
-                barOneStyle.backgroundColor = barOneColor;
-                barTwoStyle.backgroundColor = barTwoColor;
-                if(barOneHeight !== -1)
-                {
-                    barOneStyle.height = `${barOneHeight}px`;
-                    barTwoStyle.height = `${barTwoHeight}px`;
-                }
-            }, i * (100 / speed));   
-        }
+          barOneStyle.backgroundColor = barOneColor;
+          barTwoStyle.backgroundColor = barTwoColor;
+          if(barOneHeight !== -1) {
+            barOneStyle.height = `${barOneHeight}px`;
+            barTwoStyle.height = `${barTwoHeight}px`;
+          }
+        }, i * (100 / speed));   
       }
+    }
   }
 
-  quickSort()
-  {
+  quickSort() {
     alert("Work in progress for QuickSort. Currently only MERGE SORT is LIVE :)");
   }
 
-  heapSort()
-  {
+  heapSort() {
     alert("Work in progress for heapSort. Currently only MERGE SORT is LIVE :)");
   }
 
-  bubbleSort()
-  {
+  bubbleSort() {
     alert("Work in progress for bubbleSort. Currently only MERGE SORT is LIVE :)");
   }
+
+  handleSortButtonClick = (algo) => {
+    this.setState({ selectedAlgo: algo }, () => {
+      // Ensure the DOM updates before starting the animation
+      requestAnimationFrame(() => {
+        if (algo === 'Merge Sort') this.mergeSort();
+        if (algo === 'Selection Sort') this.selectionSort();
+        if (algo === 'Quick Sort') this.quickSort();
+        if (algo === 'Heap Sort') this.heapSort();
+        if (algo === 'Bubble Sort') this.bubbleSort();
+      });
+    });
+  }
+
   render() {
-    const { array, barWidth, arraySize, speed} = this.state;
+    const { array, barWidth, arraySize, speed, selectedAlgo } = this.state;
     const minSize = 10;
     const maxSize = 150;
     const step = 10;
@@ -150,22 +161,25 @@ export class SortingVisualizer extends React.Component {
         <div className="top-navbar">
           <div className="title">Sorting Visualizer</div>
           <div className="sort-buttons">
-            <button onClick={() => this.mergeSort()}>Merge Sort</button>
-            <button onClick={() => this.selectionSort()}>Selection Sort</button>
-            <button onClick={() => this.quickSort()}>Quick Sort</button>
-            <button onClick={() => this.heapSort()}>Heap Sort</button>
-            <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Merge Sort')}>Merge Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Selection Sort')}>Selection Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Quick Sort')}>Quick Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Heap Sort')}>Heap Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Bubble Sort')}>Bubble Sort</button>
           </div>
           <div className="creator">
             Created by Manan Parmar
             <a href="https://www.linkedin.com/in/mananparmar/" target="_blank" rel="noreferrer noopener">
-                <img src={LinkedInLogo} alt="LinkedIn" className="linkedin-logo" />
+              <img src={LinkedInLogo} alt="LinkedIn" className="linkedin-logo" />
             </a>
           </div>
         </div>
 
         <div className="container">
-          <div className="array-container" ref={this.containerRef}>
+        <div className="algorithm-name">
+            <h2>{selectedAlgo}</h2> {/* Display selected algorithm name */}
+        </div>
+            <div className="array-container" ref={this.containerRef}>
             {array.map((value, idx) => (
               <div 
                 className="array-bar" 
@@ -182,8 +196,8 @@ export class SortingVisualizer extends React.Component {
             <button onClick={() => this.resetArray()} className="bn31">Generate new Array</button>
             <span className="range-label">Array Size</span>
             <div className="range-controls">
-            <span id="rangeValue" className="range-value">{arraySize}</span>
-            <input
+              <span id="rangeValue" className="range-value">{arraySize}</span>
+              <input
                 type="range"
                 min={minSize}
                 max={maxSize}
@@ -191,19 +205,21 @@ export class SortingVisualizer extends React.Component {
                 value={arraySize}
                 onChange={this.handleArraySizeChange}
                 className="range"
-            />
+              />
             </div>
             <span className="range-label">Speed</span>
             <input
-                type="range"
-                min="1"
-                max="100"
-                value={speed}
-                onChange={(e) => this.setSpeed(e.target.value)}
-                className="range"
+              type="range"
+              min="1"
+              max="100"
+              value={speed}
+              onChange={(e) => this.setSpeed(e.target.value)}
+              className="range"
             />
           </div>
         </div>
+
+        <SortingAlgorithmDetails selectedAlgo={selectedAlgo} /> {/* Render the algorithm details */}
       </>
     );
   }
