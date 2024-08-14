@@ -14,7 +14,8 @@ export class SortingVisualizer extends React.Component {
       barWidth: 2,
       arraySize: 50,
       speed: 10,
-      selectedAlgo: 'Merge Sort' // State to manage selected algorithm
+      selectedAlgo: 'Merge Sort', // State to manage selected algorithm
+      isRunning: false, // State to manage if the sorting is running
     };
     this.containerRef = React.createRef();
   }
@@ -34,7 +35,7 @@ export class SortingVisualizer extends React.Component {
     for (let i = 0; i < size; i++) {
       array.push(randomFromInterval(5, 500));
     }
-    this.setState({ array, arraySize: size }, () => {
+    this.setState({ array, arraySize: size, isRunning: false }, () => {
       this.calculateBarWidth();
       this.resetBarColors(); // Reset the colors after the array is regenerated
     });
@@ -73,57 +74,101 @@ export class SortingVisualizer extends React.Component {
   mergeSort() {
     const animations = getMergeSortAnimation(this.state.array);
     const speed = this.state.speed;
+    const timeouts = [];
+  
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const isColorChange = i % 3 !== 2;
+  
       if (isColorChange) {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOne = arrayBars[barOneIdx];
         const barTwo = arrayBars[barTwoIdx];
+  
         if (barOne && barTwo) {
           const barOneStyle = barOne.style;
           const barTwoStyle = barTwo.style;
           const color = i % 3 === 0 ? 'red' : 'turquoise';
-          setTimeout(() => {
+  
+          const timeout = setTimeout(() => {
+            if (!this.state.isRunning) {
+              timeouts.forEach(clearTimeout);
+              return;
+            }
             barOneStyle.backgroundColor = color;
             barTwoStyle.backgroundColor = color;
-          }, i * (100 / speed));   
+            if (i === animations.length - 1) {
+              this.setState({ isRunning: false });
+            }
+          }, i * (100 / speed));
+  
+          timeouts.push(timeout);
         }
       } else {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
+          if (!this.state.isRunning) {
+            timeouts.forEach(clearTimeout);
+            return;
+          }
           const [barOneIdx, newHeight] = animations[i];
           const barOne = arrayBars[barOneIdx];
+  
           if (barOne) {
             const barOneStyle = barOne.style;
             barOneStyle.height = `${newHeight}px`;
           }
+          if (i === animations.length - 1) {
+            this.setState({ isRunning: false });
+          }
         }, i * (100 / speed));
+  
+        timeouts.push(timeout);
       }
     }
   }
+  
 
   selectionSort() {
-    const animations = getSelectionSortAnimation(this.state.array);
+    var animations = getSelectionSortAnimation(this.state.array);
     const speed = this.state.speed;
+    const { isRunning } = this.state;
+    const timeouts = [];
+  
     for (let i = 0; i < animations.length; i++) {
+      if (!isRunning) {
+        break;
+      }
       const arrayBars = document.getElementsByClassName('array-bar');        
       const [barOneIdx, barTwoIdx, barOneHeight, barTwoHeight, barOneColor, barTwoColor] = animations[i];
       const barOne = arrayBars[barOneIdx];
       const barTwo = arrayBars[barTwoIdx];
+      
       if (barOne && barTwo) {
         const barOneStyle = barOne.style;
         const barTwoStyle = barTwo.style;
-        setTimeout(() => {
+        
+        const timeout = setTimeout(() => {
+          if (!this.state.isRunning) {
+            // Clear all timeouts if sorting is stopped
+            timeouts.forEach(clearTimeout);
+            return;
+          }
           barOneStyle.backgroundColor = barOneColor;
           barTwoStyle.backgroundColor = barTwoColor;
           if(barOneHeight !== -1) {
             barOneStyle.height = `${barOneHeight}px`;
             barTwoStyle.height = `${barTwoHeight}px`;
           }
-        }, i * (100 / speed));   
+          if(i === animations.length-1) {
+            this.setState({isRunning : false});
+          }
+        }, i * (100 / speed));
+        
+        timeouts.push(timeout);
       }
     }
   }
+  
 
   quickSort() {
     alert("Work in progress for QuickSort. Currently only MERGE SORT is LIVE :)");
@@ -138,20 +183,28 @@ export class SortingVisualizer extends React.Component {
   }
 
   handleSortButtonClick = (algo) => {
-    this.setState({ selectedAlgo: algo }, () => {
-      // Ensure the DOM updates before starting the animation
-      requestAnimationFrame(() => {
-        if (algo === 'Merge Sort') this.mergeSort();
-        if (algo === 'Selection Sort') this.selectionSort();
-        if (algo === 'Quick Sort') this.quickSort();
-        if (algo === 'Heap Sort') this.heapSort();
-        if (algo === 'Bubble Sort') this.bubbleSort();
+    this.setState({ selectedAlgo: algo });
+  }
+
+  handleRunButtonClick = () => {
+    const { selectedAlgo, isRunning } = this.state;
+    if (isRunning) {
+      // Stop the execution
+      this.resetArray();
+    } else {
+      // Start the execution
+      this.setState({ isRunning: true }, () => {
+        if (selectedAlgo === 'Merge Sort') this.mergeSort();
+        if (selectedAlgo === 'Selection Sort') this.selectionSort();
+        if (selectedAlgo === 'Quick Sort') this.quickSort();
+        if (selectedAlgo === 'Heap Sort') this.heapSort();
+        if (selectedAlgo === 'Bubble Sort') this.bubbleSort();
       });
-    });
+    }
   }
 
   render() {
-    const { array, barWidth, arraySize, speed, selectedAlgo } = this.state;
+    const { array, barWidth, arraySize, speed, selectedAlgo, isRunning } = this.state;
     const minSize = 10;
     const maxSize = 150;
     const step = 10;
@@ -161,11 +214,11 @@ export class SortingVisualizer extends React.Component {
         <div className="top-navbar">
           <div className="title">Sorting Visualizer</div>
           <div className="sort-buttons">
-            <button onClick={() => this.handleSortButtonClick('Merge Sort')}>Merge Sort</button>
-            <button onClick={() => this.handleSortButtonClick('Selection Sort')}>Selection Sort</button>
-            <button onClick={() => this.handleSortButtonClick('Quick Sort')}>Quick Sort</button>
-            <button onClick={() => this.handleSortButtonClick('Heap Sort')}>Heap Sort</button>
-            <button onClick={() => this.handleSortButtonClick('Bubble Sort')}>Bubble Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Merge Sort')} disabled={isRunning}>Merge Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Selection Sort')} disabled={isRunning}>Selection Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Quick Sort')} disabled={isRunning}>Quick Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Heap Sort')} disabled={isRunning}>Heap Sort</button>
+            <button onClick={() => this.handleSortButtonClick('Bubble Sort')} disabled={isRunning}>Bubble Sort</button>
           </div>
           <div className="creator">
             Created by Manan Parmar
@@ -176,10 +229,10 @@ export class SortingVisualizer extends React.Component {
         </div>
 
         <div className="container">
-        <div className="algorithm-name">
+          <div className="algorithm-name">
             <h2>{selectedAlgo}</h2> {/* Display selected algorithm name */}
-        </div>
-            <div className="array-container" ref={this.containerRef}>
+          </div>
+          <div className="array-container" ref={this.containerRef}>
             {array.map((value, idx) => (
               <div 
                 className="array-bar" 
@@ -192,8 +245,13 @@ export class SortingVisualizer extends React.Component {
             ))}
           </div>
 
+          <div className="flex justify-center items-center min-h-screen">
           <div className="bottom-content">
-            <button onClick={() => this.resetArray()} className="bn31">Generate new Array</button>
+            {isRunning && <div className="loader"></div>}
+            <button onClick={this.handleRunButtonClick} className="bnRun">
+              {isRunning ? 'Stop' : 'Run'}
+            </button>
+            <button onClick={() => this.resetArray()} className="bn31" disabled={isRunning}>Generate new Array</button>
             <span className="range-label">Array Size</span>
             <div className="range-controls">
               <span id="rangeValue" className="range-value">{arraySize}</span>
@@ -205,6 +263,7 @@ export class SortingVisualizer extends React.Component {
                 value={arraySize}
                 onChange={this.handleArraySizeChange}
                 className="range"
+                disabled={isRunning}
               />
             </div>
             <span className="range-label">Speed</span>
@@ -215,8 +274,10 @@ export class SortingVisualizer extends React.Component {
               value={speed}
               onChange={(e) => this.setSpeed(e.target.value)}
               className="range"
+              disabled={isRunning}
             />
           </div>
+        </div>
         </div>
 
         <SortingAlgorithmDetails selectedAlgo={selectedAlgo} /> {/* Render the algorithm details */}
