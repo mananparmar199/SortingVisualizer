@@ -27,7 +27,7 @@ function partition(
     animations,
     pivotValue,
 ){
-    let pivotIndex =  low
+    let pivotIndex =  low;
     if (pivotValue === "high")
     {
         pivotIndex = high;
