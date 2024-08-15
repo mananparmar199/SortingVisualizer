@@ -4,6 +4,7 @@ import LinkedInLogo from './Images/Logo/LinkedIn-Logo.png';
 import SortingAlgorithmDetails from '../SortingAlgorithmDetails/SortingAlgorithmDetails'; // Import the new component
 import { getMergeSortAnimation } from '../Sorting Algorithm/mergeSort'; 
 import { getSelectionSortAnimation } from '../Sorting Algorithm/selectionSort';
+import { getQuickSortAnimation } from '../Sorting Algorithm/quickSort';
 
 export class SortingVisualizer extends React.Component {
   constructor(props) {
@@ -171,7 +172,51 @@ export class SortingVisualizer extends React.Component {
   
 
   quickSort() {
-    alert("Work in progress for QuickSort. Currently only MERGE SORT is LIVE :)");
+    var animations = getQuickSortAnimation(this.state.array);
+    const speed = this.state.speed;
+    const { isRunning } = this.state;
+    const timeouts = [];
+  
+    for (let i = 0; i < animations.length; i++) {
+      if (!isRunning) {
+        break;
+      }
+      const arrayBars = document.getElementsByClassName('array-bar');        
+      const [pivotIdx, lowIdx, highIdx, pivotHeight, lowHeight, highHeight, pivotColor, lowColor, highColor] = animations[i];
+      const pivot = arrayBars[pivotIdx];
+      const low = arrayBars[lowIdx];
+      const high = arrayBars[highIdx];
+      
+      if (pivot && low && high) {
+        const pivotStyle = pivot.style;
+        const lowStyle = low.style;
+        const highStyle = high.style;
+        
+        const timeout = setTimeout(() => {
+          if (!this.state.isRunning) {
+            // Clear all timeouts if sorting is stopped
+            timeouts.forEach(clearTimeout);
+            return;
+          }
+          pivotStyle.backgroundColor = pivotColor;
+          lowStyle.backgroundColor = lowColor;
+          highStyle.backgroundColor = highColor;
+          if(lowHeight !== -1) {
+            lowStyle.height = `${lowHeight}px`;
+            highStyle.height = `${highHeight}px`;
+          }
+          if(pivotHeight !== -1) {
+            pivotStyle.height = `${pivotHeight}px`;
+            highStyle.height = `${highHeight}px`;
+          }
+          if(i === animations.length-1) {
+            this.setState({isRunning : false});
+          }
+        }, i * (100 / speed));
+        
+        timeouts.push(timeout);
+      }
+    }
   }
 
   heapSort() {
