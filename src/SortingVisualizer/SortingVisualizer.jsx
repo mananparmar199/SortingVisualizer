@@ -330,8 +330,8 @@ export class SortingVisualizer extends React.Component {
               <div className="select">
                 <select name="format" id="format" onChange={this.handlePivotChange}>
                   <option selected disabled>Pivot Position</option>
-                  <option value="low">Low (Left)</option>
-                  <option value="high">High (Right)</option>
+                  <option value="low">Low (First Element)</option>
+                  <option value="high">High (Last Element)</option>
                   <option value="random">Random</option>
                 </select>
               </div>
