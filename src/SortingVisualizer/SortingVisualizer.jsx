@@ -17,6 +17,7 @@ export class SortingVisualizer extends React.Component {
       speed: 10,
       selectedAlgo: 'Merge Sort', // State to manage selected algorithm
       isRunning: false, // State to manage if the sorting is running
+      selectedPivot: '',
     };
     this.containerRef = React.createRef();
   }
@@ -172,7 +173,7 @@ export class SortingVisualizer extends React.Component {
   
 
   quickSort() {
-    var animations = getQuickSortAnimation(this.state.array);
+    var animations = getQuickSortAnimation(this.state.array, this.state.selectedPivot);
     const speed = this.state.speed;
     const { isRunning } = this.state;
     const timeouts = [];
@@ -248,8 +249,12 @@ export class SortingVisualizer extends React.Component {
     }
   }
 
+  handlePivotChange = (event) => {
+    this.setState({ selectedPivot: event.target.value });
+  };
+
   render() {
-    const { array, barWidth, arraySize, speed, selectedAlgo, isRunning } = this.state;
+    const { array, barWidth, arraySize, speed, selectedAlgo, isRunning} = this.state;
     const minSize = 10;
     const maxSize = 150;
     const step = 10;
@@ -321,6 +326,16 @@ export class SortingVisualizer extends React.Component {
               className="range"
               disabled={isRunning}
             />
+            {selectedAlgo === "Quick Sort" && (
+              <div className="select">
+                <select name="format" id="format" onChange={this.handlePivotChange}>
+                  <option selected disabled>Pivot Position</option>
+                  <option value="low">Low (Left)</option>
+                  <option value="high">High (Right)</option>
+                  <option value="random">Random</option>
+                </select>
+              </div>
+            )}
           </div>
         </div>
         </div>

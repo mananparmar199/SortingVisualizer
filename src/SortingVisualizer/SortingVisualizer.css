@@ -275,71 +275,68 @@ body, html {
   }
 
  /* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
 .loader {
-    --w:10ch;
-    font-weight: bold;
-    font-family: monospace;
-    font-size: 30px;
-    letter-spacing: var(--w);
-    width:var(--w);
-    overflow: hidden;
-    white-space: nowrap;
-    text-shadow: 
-      calc(-1*var(--w)) 0, 
-      calc(-2*var(--w)) 0, 
-      calc(-3*var(--w)) 0, 
-      calc(-4*var(--w)) 0,
-      calc(-5*var(--w)) 0, 
-      calc(-6*var(--w)) 0, 
-      calc(-7*var(--w)) 0, 
-      calc(-8*var(--w)) 0, 
-      calc(-9*var(--w)) 0;
-    animation: l16 2s infinite;
+    width: 20px;
+    padding: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #8a0000;
+    --_m: 
+      conic-gradient(#0000 10%,#000),
+      linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+            mask: var(--_m);
+    -webkit-mask-composite: source-out;
+            mask-composite: subtract;
+    animation: l3 1s infinite linear;
   }
-  .loader:before {
-    content:"Loading...";
-  }
-  @keyframes l16 {
-    20% {text-shadow: 
-      calc(-1*var(--w)) 0, 
-      calc(-2*var(--w)) 0 red, 
-      calc(-3*var(--w)) 0, 
-      calc(-4*var(--w)) 0 #ffa516,
-      calc(-5*var(--w)) 0 #63fff4, 
-      calc(-6*var(--w)) 0, 
-      calc(-7*var(--w)) 0, 
-      calc(-8*var(--w)) 0 green, 
-      calc(-9*var(--w)) 0;}
-    40% {text-shadow: 
-      calc(-1*var(--w)) 0, 
-      calc(-2*var(--w)) 0 red, 
-      calc(-3*var(--w)) 0 #e945e9, 
-      calc(-4*var(--w)) 0,
-      calc(-5*var(--w)) 0 green, 
-      calc(-6*var(--w)) 0 orange, 
-      calc(-7*var(--w)) 0, 
-      calc(-8*var(--w)) 0 green, 
-      calc(-9*var(--w)) 0;}
-    60% {text-shadow: 
-      calc(-1*var(--w)) 0 lightblue, 
-      calc(-2*var(--w)) 0, 
-      calc(-3*var(--w)) 0 #e945e9, 
-      calc(-4*var(--w)) 0,
-      calc(-5*var(--w)) 0 green, 
-      calc(-6*var(--w)) 0, 
-      calc(-7*var(--w)) 0 yellow, 
-      calc(-8*var(--w)) 0 #ffa516, 
-      calc(-9*var(--w)) 0 red;}
-    80% {text-shadow: 
-      calc(-1*var(--w)) 0 lightblue, 
-      calc(-2*var(--w)) 0 yellow, 
-      calc(-3*var(--w)) 0 #63fff4, 
-      calc(-4*var(--w)) 0 #ffa516,
-      calc(-5*var(--w)) 0 red, 
-      calc(-6*var(--w)) 0, 
-      calc(-7*var(--w)) 0 grey, 
-      calc(-8*var(--w)) 0 #63fff4, 
-      calc(-9*var(--w)) 0 ;}
-  }
+  @keyframes l3 {to{transform: rotate(1turn)}}
 
+  
   /* Loader css End*/
+
+  select {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    -ms-appearance:none;
+    appearance:none;
+    outline:0;
+    box-shadow:none;
+    border:0!important;
+    background: #05876d;
+    background-image: none;
+    flex: 1;
+    padding: 0 .5em;
+    color:#fff;
+    cursor:pointer;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+ }
+ select::-ms-expand {
+    display: none;
+ }
+ .select {
+    position: relative;
+    display: flex;
+    width: 10em;
+    height: 3em;
+    line-height: 3;
+    background: #04fac9;
+    overflow: hidden;
+    border-radius: .25em;
+ }
+ .select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #296c6c;
+    cursor:pointer;
+    pointer-events:none;
+    transition:.25s all ease;
+ }
+ .select:hover::after {
+    color: #23b499;
+ }

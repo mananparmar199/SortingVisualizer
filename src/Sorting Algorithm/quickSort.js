@@ -1,7 +1,7 @@
-export function getQuickSortAnimation(array){
+export function getQuickSortAnimation(array, pivotValue){
     const animations = [];
     if(array.length <= 1) return array;
-    quickSortHelper(array,0,array.length-1, animations);
+    quickSortHelper(array,0,array.length-1, animations, pivotValue);
     return animations;
 }
 
@@ -10,12 +10,13 @@ function quickSortHelper(
     low,
     high,
     animations,
+    pivotValue,
 ){
     if(low < high)
     {
-        var pivot = partition(mainArray, low, high, animations); 
-        quickSortHelper(mainArray, low, pivot-1, animations);
-        quickSortHelper(mainArray, pivot+1, high, animations);
+        var pivot = partition(mainArray, low, high, animations, pivotValue); 
+        quickSortHelper(mainArray, low, pivot-1, animations, pivotValue);
+        quickSortHelper(mainArray, pivot+1, high, animations, pivotValue);
     }
 }
 
@@ -24,9 +25,17 @@ function partition(
     low,
     high,
     animations,
+    pivotValue,
 ){
-    let pivotIndex =  Math.floor(Math.random() * (high - low + 1)) + low;
-   // let pivotIndex = high;
+    let pivotIndex =  low
+    if (pivotValue === "high")
+    {
+        pivotIndex = high;
+    }
+    else if(pivotValue === "random")
+    {
+        pivotIndex =  Math.floor(Math.random() * (high - low + 1)) + low;
+    }
     let pivot = mainArray[pivotIndex];
     swap(mainArray, pivotIndex, high);
     animations.push([pivotIndex, low, high,mainArray[pivotIndex],-1,mainArray[high],"red","orange","red"]);
